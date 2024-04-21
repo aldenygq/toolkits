@@ -9,8 +9,7 @@ import (
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
-	tentcent "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20210111"
-)
+	tencent "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20210111"
 )
 type AliyunSmsClient struct {
 	AClient *dysmsapi20170525.Client
@@ -72,7 +71,7 @@ func (a *AliyunSmsClient) SendSms(phoneNumbers,signName,TemplateCode,conntent st
 }
 
 type TencentSmsClient struct {
-	TClient *tentcent.Client
+	TClient *tencent.Client
 }
 func NewTencentSmsClient(ak,sk,endpoint,region string) (*TencentSmsClient,error) {
 	credential := common.NewCredential(ak, sk)
@@ -80,21 +79,21 @@ func NewTencentSmsClient(ak,sk,endpoint,region string) (*TencentSmsClient,error)
 	cpf.HttpProfile.Endpoint = endpoint
 	client, err := tencent.NewClient(credential, region, cpf)
 	if err != nil {
-		retturn nil,err
+		return nil,err
 	}
 	return &TencentSmsClient{
 		TClient: client,
 	},err
 }
-func (t *TencentSmsClient) TencentSendSmsCode(appid,signName,templateId,phoneNumbers code string) error {
-	request := t.NewSendSmsRequest()
+func (t *TencentSmsClient) TencentSendSmsCode(appid,signName,templateId,phoneNumbers,content string) error {
+	request := tencent.NewSendSmsRequest()
 	request.SmsSdkAppId = common.StringPtr(appid)
 	request.SignName = common.StringPtr(signName)
 	request.TemplateId = common.StringPtr(templateId)
 	request.PhoneNumberSet = common.StringPtrs([]string{phoneNumbers})
-	request.TemplateParamSet = common.StringPtrs([]string{code})
+	request.TemplateParamSet = common.StringPtrs([]string{content})
 	
-	response, err := t.SendSms(request)
+	response, err := t.TClient.SendSms(request)
 	if err != nil {
 		return err
 	}
