@@ -1,75 +1,68 @@
-package pkg
+package toolkits
 
 import (
-	"io/ioutil"
-	"net/http"
-	"net/url"
-	"unicode/utf8"
 	"errors"
 	
-	"go-sso/utils/cache"
-	"go-sso/utils/verify"
-	"oncall/databases"
+	openapi "github.com/alibabacloud-go/darabonba-openapi/v2/client"
+	dysmsapi20170525 "github.com/alibabacloud-go/dysmsapi-20170525/v3/client"
+	util "github.com/alibabacloud-go/tea-utils/v2/service"
+	"github.com/alibabacloud-go/tea/tea"
 )
-
-const (
-	SMSTPL = "【xxxx】您正在申请手机注册，验证码为：[code]，若非本人操作请忽略！"
-	//账号
-	ACCOUNT = "***************"
-	//密码
-	PSWD = "***************"
-	// 发送url，
-	URL = "xxxxxxxxxxxxxxxxxxx"
-)
-
-func SmsCheck(key, code string) bool {
-	//key = cache.RedisSuf + key
-	// 从池里获取连接
-	rc := databases.RedisClient.Get(key).
-	// 用完后将连接放回连接池
-	defer rc.Close()
-	val, err := redis.String(rc.Do("GET", key))
-	if err != nil || val != code {
-		return false
-	}
-	return true
+type AliyunSmsClient struct {
+	AClient *dysmsapi20170525.Client
 }
-func SmsSet(key, val string) (err error) {
-	key = cache.RedisSuf + key
-	// 从池里获取连接
-	rc := cache.RedisClient.Get()
-	// 用完后将连接放回连接池
-	defer rc.Close()
-	_, err = rc.Do("Set", key, val, "EX", 600)
+func NewAliyunSmsClient(ak,sk,endpoint string) (*AliyunSmsClient,error) {
+	config := &openapi.Config{
+		AccessKeyId:     tea.String(ak),
+		AccessKeySecret: tea.String(sk),
+		Endpoint:        tea.String(endpoint),
+	}
+	client, err := dysmsapi20170525.NewClient(config)
 	if err != nil {
-		return
+		return nil,err
 	}
-	return
+	return &AliyunSmsClient{
+		AClient:client,
+	},nil
 }
-
-func HttpPostForm(url string, data url.Values) (string, error) {
+func (a *AliyunSmsClient) SendSms(phoneNumbers,signName,TemplateCode,conntent string) error {
+	sendSmsRequest := &dysmsapi20170525.SendSmsRequest{
+		PhoneNumbers:  tea.String(phoneNumbers),
+		SignName:      tea.String(signName),
+		TemplateCode:  tea.String(TemplateCode),
+		TemplateParam: tea.String(conntent),
+	}
 	
-	resp, err := http.PostForm(url, data)
-	if err != nil {
-		return "", err
+	runtime := &util.RuntimeOptions{}
+	tryErr := func() (_e error) {
+		defer func() {
+			if r := tea.Recover(recover()); r != nil {
+				_e = r
+			}
+		}()
+		result, _err := a.AClient.SendSmsWithOptions(sendSmsRequest, runtime)
+		if _err != nil {
+			return _err
+		}
+		if *result.Body.Code != "OK" {
+			return errors.New(*result.Body.Message)
+		}
+		return nil
+	}()
+	
+	if tryErr != nil {
+		var error = &tea.SDKError{}
+		if _t, ok := tryErr.(*tea.SDKError); ok {
+			error = _t
+		} else {
+			error.Message = tea.String(tryErr.Error())
+		}
+		result, _err := util.AssertAsString(error.Message)
+		if _err != nil {
+			return _err
+		}
+		return errors.New(*result)
 	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-	return string(body), nil
+	
+	return nil
 }
-
-//发送短信
-func SendSms(mobile, msg string) error {
-
-	if utf8.RuneCountInString(msg) < 10 {
-		return errors.New("Character length is not enough.")
-	}
-	//不同信道参数可能不同，具体查看其开发文档
-	data_send := url.Values{"account": {ACCOUNT}, "pswd": {PSWD}, "mobile": {mobile}, "msg": {msg}}
-	_, err := HttpPostForm(URL, data_send)
-	return err
-}
-

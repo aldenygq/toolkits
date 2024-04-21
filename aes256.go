@@ -2,6 +2,7 @@ package toolkits
 
 import (
 	"bytes"
+	"math/rand"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
