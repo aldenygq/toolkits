@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 )
-func GenerateUniqueID() (string,err)  {
+func GenerateUniqueID() (string,error)  {
 	// 使用加密安全的随机数生成器生成字节切片
 	byteSlice := make([]byte, 8)
 	if _, err := io.ReadFull(rand.Reader, byteSlice); err != nil {
