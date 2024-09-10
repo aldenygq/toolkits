@@ -15,7 +15,7 @@ import (
 )
 
 // 检查证书有效期的函数
-func CheckCertValidity(domain string) (map[string]interface{},error) {
+func CheckCertValidityByDomain(domain string) (map[string]interface{},error) {
     var (
         err error
         domainmap map[string]interface{} = make(map[string]interface{},0)
