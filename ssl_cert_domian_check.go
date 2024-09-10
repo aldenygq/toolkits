@@ -2,16 +2,16 @@ package toolkits
 
 import (
     "crypto/tls"
-    //"crypto/x509"
+    "crypto/x509"
+	"encoding/pem"
     "fmt"
-    //"log"
     "net/http"
     "time"
     "encoding/json"
     "strings"
     "errors"
     "os"
-
+    "io/ioutil"
 )
 
 // 检查证书有效期的函数
@@ -42,10 +42,6 @@ func CheckCertValidityByDomain(domain string) (map[string]interface{},error) {
         fmt.Printf("no certificates found for %s\n", domain)
         return nil,errors.New(fmt.Sprintf("no certificates found for %s\n", domain))
     }
-    //certinfo,_:= json.Marshal(certs)
-    //fmt.Printf("certs:%v\n",string(certinfo))
-    //domainlist := strings.Split(domain,".")
-    //fmt.Printf("domian:%v\n",domainlist[len(certs)-2])
     // 打印证书有效期
     for _, cert := range certs {
         if !strings.Contains(cert.Subject.CommonName,strings.Split(domain,".")[len(certs)-2]) {
@@ -56,5 +52,37 @@ func CheckCertValidityByDomain(domain string) (map[string]interface{},error) {
         domainmap["unixtime"] = strtime.Unix()
         domainmap["strtime"] = strtime.Format("2006-01-02 15:04:05")
     }
+    return domainmap,nil
+}
+
+func CheckCertValidityByPem(filepath string) (map[string]interface{},error) {
+     var (
+         err error
+         domainmap map[string]interface{} = make(map[string]interface{},0)
+     )
+    // 读取PEM格式的证书文件
+	certPEM, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		fmt.Println("Error reading certificate file:", err)
+		return nil ,err
+	}
+
+	// 解码PEM数据
+	block, _ := pem.Decode(certPEM)
+	if block == nil {
+		fmt.Println("Failed to parse certificate PEM")
+		return nil,err
+	}
+
+	// 解析证书
+	cert, err := x509.ParseCertificate(block.Bytes)
+	if err != nil {
+		fmt.Println("Error parsing certificate:", err)
+		return nil,err
+	}
+    strtime,_ := time.Parse("2006-01-02T15:04:05Z",cert.NotAfter.Format(time.RFC3339))
+    domainmap["pem_file"] = filepath
+    domainmap["unixtime"] = strtime.Unix()
+    domainmap["strtime"] = strtime.Format("2006-01-02 15:04:05")
     return domainmap,nil
 }
