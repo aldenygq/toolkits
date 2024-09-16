@@ -7,7 +7,7 @@ import (
 )
 //go test -v -test.run Test_SendMail
 func Test_SendMail(t *testing.T) {
-    var mail Mail
+    var mail MailConf
     mail.user = "****************8"
     mail.passwd = "****************"
     mail.host = "smtp.163.com"
