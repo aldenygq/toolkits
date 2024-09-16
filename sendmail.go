@@ -10,6 +10,10 @@ import (
         "io/ioutil"
         "encoding/base64"
 )
+type Mail interface {
+	NewMailClient(mail MailConf) (*smtp.Client,error)
+	SendMail(client *smtp.Client,message Message) error
+}
 type Attachment struct {
 	name        string
 	contentType string
@@ -26,14 +30,14 @@ type Message struct {
 	contentType string
 	attachment  Attachment
 }
-type Mail struct {
+type MailConf struct {
 	user     string
 	passwd string
 	host     string
 	port     string
 }
 
-func NewMailClient(mail Mail) (*smtp.Client,error) {
+func NewMailClient(mail MailConf) (*smtp.Client,error) {
     auth := smtp.PlainAuth("", mail.user, mail.passwd, mail.host)
     conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%s", mail.host, mail.port), &tls.Config{})
     if err != nil {
