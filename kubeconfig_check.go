@@ -3,9 +3,9 @@ package toolkits
 import (
     "fmt"
     "time"
-    "os"
-    "bytes"
-    "os/exec"
+    //"os"
+    //"bytes"
+    //"os/exec"
     "strings"
 )
 
@@ -28,7 +28,7 @@ func CheckKubeconfigByFile(filepath string) (string,int64,error) {
         fmt.Println("Error parsing time:", err)
         return strExpireTime,unixExpireTime,err
     }
-    unixExpireTime := t.Unix()
+    unixExpireTime = t.Unix()
     fmt.Printf("unix timestamp:%v\n",unixExpireTime)
     tm := time.Unix(unixExpireTime,0)
     strExpireTime = tm.Format("2006-01-02 15:04:05")
@@ -36,6 +36,7 @@ func CheckKubeconfigByFile(filepath string) (string,int64,error) {
     return strExpireTime,unixExpireTime,nil
 }
 
+/*
 func RunCmd(cmdstring string) (string, error) {
         var out bytes.Buffer
         var stderr bytes.Buffer
@@ -49,3 +50,4 @@ func RunCmd(cmdstring string) (string, error) {
         }
         return fmt.Sprintf("%v",out.String()),nil
 }
+*/
