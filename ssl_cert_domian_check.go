@@ -14,7 +14,7 @@ import (
     "io/ioutil"
 )
 
-// 检查证书有效期的函数
+// 检查域名证书有效期的函数
 func CheckCertValidityByDomain(domain string) (map[string]interface{},error) {
     var (
         err error
@@ -55,6 +55,7 @@ func CheckCertValidityByDomain(domain string) (map[string]interface{},error) {
     return domainmap,nil
 }
 
+//校验pem证书有效期
 func CheckCertValidityByPem(filepath string) (map[string]interface{},error) {
      var (
          err error
