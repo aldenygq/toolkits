@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"io"
 )
-func GenerateUniqueID() (string,error)  {
+func GenerateUniqueID(digit int) (string,error)  {
 	// 使用加密安全的随机数生成器生成字节切片
-	byteSlice := make([]byte, 8)
+	byteSlice := make([]byte,digit)
 	if _, err := io.ReadFull(rand.Reader, byteSlice); err != nil {
 		fmt.Printf("Failed to generate a random unique ID")
 		return "",err 
