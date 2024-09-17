@@ -5,6 +5,7 @@ import (
 	"regexp"
 )
 
+//校验电话号码是否合法
 func CheckMobile(phone string) bool {
 	// ^1第一位为1
 	// [345789]{1} 后接一位345789 的数字
