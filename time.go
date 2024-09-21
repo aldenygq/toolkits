@@ -64,35 +64,3 @@ func timeCost() func() {
           fmt.Printf("time cost = %v\n", tc)
       }
 }
-/*
-func main() {
-	day1 := "2024-01-04"
-	day2 := "2024-01-03"
-	fmt.Printf("num:%v\n",CompareTwoDay(day1,day2))
-	//fmt.Printf("day unix:%v\n",StrToUnix(getDay()))
-		currtime := time.Now()
-		fmt.Printf("now:%v\n",currtime)
-	
-	
-		t1:=time.Now().Year()        //年
-		t2:=time.Now().Month()       //月
-		t3:=time.Now().Day()         //日
-		t4:=time.Now().Hour()        //小时
-		t5:=time.Now().Minute()      //分钟
-		t6:=time.Now().Second()      //秒
-		t7:=time.Now().Nanosecond()  //纳秒
-	
-		fmt.Printf("year:%v\n",t1)
-		fmt.Printf("eng month:%v\n",t2)
-		fmt.Printf("int month:%v\n",int(t2))
-		fmt.Printf("day:%v\n",t3)
-		fmt.Printf("hour:%v\n",t4)
-		fmt.Printf("minute:%v\n",t5)
-		fmt.Printf("second:%v\n",t6)
-		fmt.Printf("nano second:%v\n",t7)
-	
-		//如果获取UTC时间，则可以使用time.UTC
-		currentTimeData:=time.Date(t1,t2,t3,t4,t5,t6,t7,time.Local) //获取当前时间，返回当前时间Time
-		fmt.Println(currentTimeData)    //打印结果：2017-04-11 12:52:52.794411287 +0800 CST
-}
-*/
