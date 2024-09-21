@@ -57,9 +57,9 @@ func GetWeekDay(date string) (int,error) {
 //      defer timeCost()()//注意，是对 timeCost()返回的函数进行调用，因此需要加两对小括>    号
 //      ......
 //}
-func timeCost() func() {
+func TimeCost() func() {
 	start := time.Now()
-       return func() {
+        return func() {
           tc:=time.Since(start)
           fmt.Printf("time cost = %v\n", tc)
       }
