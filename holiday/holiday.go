@@ -6,6 +6,7 @@ import (
     "fmt"
     "io/ioutil"
     "time"
+    "strings"
 )
 const (
     DAY_LAYOUT = "2006-01-02"
@@ -16,8 +17,6 @@ type Holiday struct {
     Name string `json:"name"`
     IsOfficeDay bool `json:"is_office_day"`
 }
-
-//初始化节假日信息列表
 func NewHolidayInfo(datefile string) error {
    // 打开文件
    file, err := os.Open(datefile)
@@ -61,11 +60,53 @@ func IsWeekend(dateStr string) bool {
 
 	return isWeekend
 }
-//获取节假日信息列表
-func GetHolidays() []Holiday {
-    return Holidays
+func GetYearHolidays(year string) []Holiday {
+    var hs []Holiday = make([]Holiday,0)
+    for _,v := range Holidays {
+        ds := strings.Split(v.Date,"-")
+        if ds[0] == year && !v.IsOfficeDay{
+            hs = append(hs,v)
+        }
+    }
+    return hs
 }
-//是否是节假日，不包含周末
+func GetMonthHolidays(year,month string) []Holiday {
+    var hs []Holiday = make([]Holiday,0)
+    for _,v := range Holidays {
+        ds := strings.Split(v.Date,"-")
+        if len(month) == 1 {
+            month = "0" + month
+        }
+        if ds[0] == year && ds[1] == month && !v.IsOfficeDay{
+            hs = append(hs,v)
+        }
+    }
+    return hs
+}
+func GetYearMakeUpDay(year string) []Holiday {
+    var hs []Holiday = make([]Holiday,0)
+    for _,v := range Holidays {
+        ds := strings.Split(v.Date,"-")
+       if ds[0] == year && v.IsOfficeDay{
+            hs = append(hs,v)
+       }
+    }
+
+    return hs
+}
+func GetMonthMakeUpDay(year,month string) []Holiday {
+    var hs []Holiday = make([]Holiday,0)
+    for _,v := range Holidays {
+        ds := strings.Split(v.Date,"-")
+        if len(month) == 1 {
+            month = "0" + month
+        }
+        if ds[0] == year && ds[1] == month && v.IsOfficeDay{
+            hs = append(hs,v)
+        }
+    }
+    return hs
+}
 func IsHoliday(dateStr string) bool {
     for _,v := range Holidays {
         if dateStr == v.Date {
@@ -76,8 +117,7 @@ func IsHoliday(dateStr string) bool {
     }
     return true
 }
-
-//是否是工作日，排除节假日、周末(不包含调休，调休属于工作日)
+//是否是工作日
 func IsOfficeDay(dateStr string) bool {
     //是否是周末
     if IsWeekend(dateStr) {
