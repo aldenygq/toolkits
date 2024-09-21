@@ -9,12 +9,15 @@ import (
 const (
 	TIME_LAYOUT = "2006-01-02 15:04:05"
 )
+//获取当前日期
 func GetDay() string {
     now := time.Now().Format("2006-01-02")
   
    // fmt.Println("Current date:", now.Format("2006-01-02"))
 	return now
 }
+
+//str time转unix时间戳
 func StrToUnix(t string) int64 {
 	times, _ := time.Parse(t,TIME_LAYOUT)
 	return times.Unix()
@@ -38,6 +41,19 @@ func CompareTwoDay(day1,day2 string) int64{
 	return 3
 }
 
+//统计函数耗时
+//引用方式
+//func Func(n int) int {
+//      defer timeCost()()//注意，是对 timeCost()返回的函数进行调用，因此需要加两对小括>    号
+//      ......
+//}
+func timeCost() func() {
+	start := time.Now()
+       return func() {
+          tc:=time.Since(start)
+          fmt.Printf("time cost = %v\n", tc)
+      }
+}
 /*
 func main() {
 	day1 := "2024-01-04"
