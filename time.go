@@ -18,11 +18,14 @@ func GetDay() string {
 }
 
 //str time转unix时间戳
-func StrToUnix(t string) int64 {
+func StringToUnix(t string) int64 {
 	times, _ := time.Parse(t,TIME_LAYOUT)
 	return times.Unix()
 }
-
+//unix时间戳转string
+func UnixToString(num int64) string {
+	return time.Unix(num, 0).Format("2006-01-02 15:04:05")
+}
 
 //比较day1和day2日期顺序，如day1在前。返回0，如day2在前，返回1，如等于，返回2
 func CompareTwoDay(day1,day2 string) int64{
