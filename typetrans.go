@@ -84,3 +84,31 @@ func FloatRound(f float64, n int) float64 {
 	res, _ := strconv.ParseFloat(fmt.Sprintf(format, f), 64)
 	return res
 }
+
+//检测字符串是否包含阿拉伯数字,包含为true，不包含为false
+func CheckInt(str string) bool {
+	reg := regexp.MustCompile(`[0-9]+`)
+	result := reg.FindAllString(str, -1)
+	if len(result) != 0 {
+		return true
+	}
+	return false
+}
+
+//检测字符串是否包含汉字,包含为true，不包含为false
+func CheckString(str string) bool {
+	reg := regexp.MustCompile(`[\p{Han}]+`)
+	result := reg.FindAllString(str, -1)
+	if len(result) >= 1 {
+		return true
+	}
+	return false
+}
+//校验hash密码
+func CompareHashAndPassword(e string, p string) (bool, error) {
+	err := bcrypt.CompareHashAndPassword([]byte(e), []byte(p))
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
