@@ -41,6 +41,16 @@ func CompareTwoDay(day1,day2 string) int64{
 	return 3
 }
 
+//指定日期确认周几
+func GetWeekDay(date string) (int,error) {
+    
+    // 解析日期字符串
+    t, err := time.Parse("2006-01-02", date)
+    if err != nil {
+        return int(t.Weekday()),err 
+    }
+    return int(t.Weekday()),nil 
+}
 //统计函数耗时
 //引用方式
 //func Func(n int) int {
