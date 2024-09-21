@@ -68,19 +68,3 @@ func TimeCost() func() {
           fmt.Printf("time cost = %v\n", tc)
       }
 }
-
-//校验指定日期是否是周末
-// IsWeekend 检查指定的日期是否是周末
-func IsWeekend(dateStr string) (bool, error) {
-	// 解析日期字符串，默认格式为 "2006-01-02"，这是Go中的特殊时间格式
-	date, err := time.Parse(DAY_LAYOUT, dateStr)
-	if err != nil {
-		return false, err
-	}
-
-	// 检查日期是否是星期六(6)或星期日(0)
-	dayOfWeek := date.Weekday()
-	isWeekend := dayOfWeek == time.Saturday || dayOfWeek == time.Sunday
-
-	return isWeekend, nil
-}
