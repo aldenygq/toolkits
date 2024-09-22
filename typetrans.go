@@ -1,11 +1,11 @@
-package tools
+package toolkits
 
 import (
 	"encoding/json"
 	"fmt"
 	"regexp"
 	"strconv"
-	"strings"
+	//"strings"
 
 	"golang.org/x/crypto/bcrypt"
 )

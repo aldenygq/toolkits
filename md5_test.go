@@ -1,4 +1,4 @@
-package toolits
+package toolkits
 
 import (
 	"testing"

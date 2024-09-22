@@ -4,6 +4,7 @@ import (
     "fmt"
     "net/url"
     "strings"
+	"net"
 )
 
 // 检查域名格式是否合理
@@ -27,7 +28,7 @@ func CheckDomainARecord(domain string) ([]string,[]string,error) {
 	ips, err := net.LookupIP(domain)
     if err != nil {
         fmt.Printf("无法解析域名: %s\n", err)
-        return nil,err 
+        return nil,nil,err 
     }
 	for _, ip := range ips {
 		if ip.To4() != nil {

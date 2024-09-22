@@ -1,15 +1,18 @@
-module github.com/aldenygq/toolkits
+module toolkits
 
-go 1.20
+go 1.21.11
 
 require (
-	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.6
+	github.com/alibabacloud-go/darabonba-openapi/v2 v2.0.9
 	github.com/alibabacloud-go/dysmsapi-20170525/v3 v3.0.6
+	github.com/alibabacloud-go/dyvmsapi-20170525/v3 v3.0.0
 	github.com/alibabacloud-go/tea v1.2.2
-	github.com/alibabacloud-go/tea-utils/v2 v2.0.5
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.904
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.904
-	gopkg.in/yaml.v2 v2.2.8
+	github.com/alibabacloud-go/tea-utils/v2 v2.0.7
+	github.com/satori/go.uuid v1.2.0
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.1006
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.1006
+	golang.org/x/crypto v0.27.0
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -24,8 +27,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/tjfoc/gmsm v1.3.2 // indirect
-	golang.org/x/net v0.20.0 // indirect
+	golang.org/x/net v0.21.0 // indirect
 	gopkg.in/ini.v1 v1.56.0 // indirect
 )

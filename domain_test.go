@@ -3,8 +3,8 @@ import (
     "testing"
     "fmt"
 )
-//go test -v -test.run Test_CheckDomainValid
-func Test_CheckDomainValid(t *testing.T) {
+//go test -v -test.run Test_IsDomainValid
+func Test_IsDomainValid(t *testing.T) {
     domain := "a.b.c"
-    fmt.Printf("result:%v\n",CheckDomainValid(domain))
+    fmt.Printf("result:%v\n",IsDomainValid(domain))
 }
