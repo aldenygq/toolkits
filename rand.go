@@ -3,7 +3,7 @@ import (
     "math/rand"
     "time"
 )
-//获取随机数 纯文字
+//获取随机字符串，纯英文字符(包含大小写)
 func GetRandomString(n int) string {
 	str := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	bytes := []byte(str)
@@ -15,7 +15,7 @@ func GetRandomString(n int) string {
 	return string(result)
 }
 
-//获取随机数  数字和文字
+//获取随机字符串，包含数字英文字符(包含大小写)
 func GetRandomBoth(n int) string {
 	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	bytes := []byte(str)
@@ -27,9 +27,9 @@ func GetRandomBoth(n int) string {
 	return string(result)
 }
 
-//获取随机数  纯数字
-func GetRandomNum(n int) string {
-	str := "0123456789"
+//获取随机字符串，包含数字英文字符(包含大小写)
+func GetRandomBothSpecChar(n int) string {
+	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!~@#$%^&*><?:;.,[]{}+-=_"
 	bytes := []byte(str)
 	result := []byte{}
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -39,10 +39,9 @@ func GetRandomNum(n int) string {
 	return string(result)
 }
 
-
-//获取随机数  base32
-func GetRandomBase32(n int) string {
-	str := "01234567abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+//获取随机字符串,纯数字
+func GetRandomNum(n int) string {
+	str := "0123456789"
 	bytes := []byte(str)
 	result := []byte{}
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))

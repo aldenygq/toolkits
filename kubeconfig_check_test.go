@@ -5,7 +5,7 @@ import (
 )
 //go test -v -test.run Test_CheckKubeconfigByFile
 func Test_CheckKubeconfigByFile(t *testing.T) {
-    filepath := "～/.kube/config
+    filepath := "~/.kube/config"
     strtime,unixtime,err := CheckKubeconfigByFile(filepath)
     if err != nil {
         fmt.Printf("check kubeconfig file failed:%v\n",err)
