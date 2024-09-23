@@ -31,14 +31,35 @@ func CheckEmail(email string) bool {
 	return emailRegex.MatchString(email)
 }
 
-// 验证密码长度及复杂度，长度大于8
-func ValidatePassword(password string) bool {
-	// 至少8个字符，至少包含一个数字和一个特殊字符
-	pattern := `^(?=.*[0-9])(?=.*[!@#$%^&*])(.{8,})$`
-	matched, err := regexp.MatchString(pattern, password)
-	if err != nil {
-		fmt.Printf("密码不合法: %s\n", err)
-		return false
+// 验证密码长度及复杂度，长度可以自定义
+func ValidatePassword(password string,lenth int) error {
+	// 长度大于8
+	if len(password) <= lenth {
+		return fmt.Errorf("密码长度必须大于%v",lenth)
 	}
-	return matched
+
+	// 包含至少一个小写字母
+	hasLowercase := regexp.MustCompile(`[a-z]`)
+	// 包含至少一个大写字母
+	hasUppercase := regexp.MustCompile(`[A-Z]`)
+	// 包含至少一个数字
+	hasDigit := regexp.MustCompile(`[0-9]`)
+	// 包含至少一个特殊符号
+	hasSpecial := regexp.MustCompile(`[^!@#$%^&*/\>]`)
+
+	if !hasLowercase.MatchString(password) {
+		return fmt.Errorf("密码必须包含至少一个小写字母")
+	}
+	if !hasUppercase.MatchString(password) {
+		return fmt.Errorf("密码必须包含至少一个大写字母")
+	}
+	if !hasDigit.MatchString(password) {
+		return fmt.Errorf("密码必须包含至少一个数字")
+	}
+	if !hasSpecial.MatchString(password) {
+		return fmt.Errorf("密码必须包含至少一个特殊符号")
+	}
+
+	// 如果所有检查都通过
+	return nil
 }
