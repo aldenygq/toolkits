@@ -1,4 +1,4 @@
-module toolkits
+module github.com/aldenygq/toolkits
 
 go 1.21.11
 
