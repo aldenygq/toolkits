@@ -9,6 +9,11 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 )
+func Int64ToPointInt64(i int64) *int64 {
+	ptrValue := new(int64)
+    	*ptrValue = i
+	return  ptrValue
+}
 //string to int
 func StrToInt(index string) int {
 	result,_:= strconv.Atoi(index)
