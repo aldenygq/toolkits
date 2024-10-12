@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"time"
 	"strings"
-	
-	//analyticshub "google.golang.org/api/analyticshub/v1beta1"
 )
 const (
 	TIME_LAYOUT = "2006-01-02 15:04:05"
@@ -189,3 +187,16 @@ func ChineseToNumber(weekday string) int {
 	}
 }
 
+//获取当前月份日期列表
+func DayListInMonth(year, month int) []string {
+    var dateList []string = make([]string,0)
+    for day := 1; day <= DayNumInMonth(year, month); day++ {
+        date := time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local)
+        dateList = append(dateList,date.Format(DAY_LAYOUT))
+    }
+    return dateList
+}
+//获取当前月份天数
+func DayNumInMonth(year,month int) int {
+    return time.Date(year, time.Month(month)+1, 0, 0, 0, 0, 0, time.UTC).Day()
+}
