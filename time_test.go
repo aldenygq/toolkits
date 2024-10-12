@@ -93,3 +93,17 @@ func Test_ChineseToNumber(t *testing.T) {
     week := "星期一"
     fmt.Printf("week:%v\n",ChineseToNumber(week))
 }
+
+//go test -v -test.run Test_DayNumInMonth
+func Test_DayNumInMonth(t *testing.T) {
+    var year int = 2024
+    var month int = 5
+    fmt.Printf("days:%v\n",DayNumInMonth(year,month))
+}
+
+//go test -v -test.run Test_DayListInMonth
+func Test_DayListInMonth(t *testing.T) {
+     var year int = 2024
+     var month int = 5
+     fmt.Printf("days list:%v\n",DayListInMonth(year,month))
+}
