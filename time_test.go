@@ -107,3 +107,16 @@ func Test_DayListInMonth(t *testing.T) {
      var month int = 5
      fmt.Printf("days list:%v\n",DayListInMonth(year,month))
 }
+
+//go test -v -test.run Test_TimeDuration
+func Test_TimeDuration(t *testing.T) {
+    start := 1728781932
+    end := 1728872614
+
+    info,err := TimeDuration(start,end)
+    if err != nil {
+        fmt.Printf("err:%v\n",err)
+        return
+    }
+    fmt.Printf("duration:%v\n",info)
+}
