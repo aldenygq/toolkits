@@ -22,7 +22,7 @@ var (
 // CustomClaims 载荷，可以加一些自己需要的信息
 type CustomClaims struct {
 	ID       int64  `json:"id"`
-	Username string `json:"name"`
+	UserName string `json:"username"`
 	jwt.StandardClaims
 }
 
