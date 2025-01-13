@@ -3,6 +3,7 @@ package toolkits
 import (
 	"fmt"
 	"regexp"
+	"unicode"
 )
 
 //校验电话号码是否合法
@@ -62,4 +63,15 @@ func ValidatePassword(password string,lenth int) error {
 
 	// 如果所有检查都通过
 	return nil
+}
+
+
+// containsChinese 判断字符串是否包含中文字符
+func ContainsChinese(s string) bool {
+    for _, c := range s {
+        if unicode.Is(unicode.Scripts["Han"], c) {
+            return true
+        }
+    }
+    return false
 }
