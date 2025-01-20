@@ -75,3 +75,31 @@ func ContainsChinese(s string) bool {
     }
     return false
 }
+// containsChinese 判断字符串是否包含英文字符
+func ContainsEnglishLetters(s string) bool {
+    for _, c := range s {
+        if unicode.IsLetter(c) { // 检查字符是否为字母
+            return true
+        }
+    }
+    return false
+}
+// containsUppercase 判断字符串中是否包含至少一个大写字母
+func ContainsUppercase(s string) bool {
+    for _, r := range s {
+        if unicode.IsUpper(r) {
+            return true
+        }
+    }
+    return false
+}
+// containsLowercase 判断字符串中是否包含至少一个大写字母
+func ContainsLowercase(s string) bool {
+    for _, r := range s {
+        if unicode.IsLower(r) {
+            return true
+        }
+    }
+    return false
+}
+
