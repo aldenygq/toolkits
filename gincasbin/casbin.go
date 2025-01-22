@@ -2,7 +2,7 @@ package gincasbin
 
 import (
     gormadapter "github.com/casbin/gorm-adapter/v3"
-    casbin "github.com/casbin/casbin/v3"
+    casbin "github.com/casbin/casbin/v2"
     "gorm.io/gorm"
 )
 
