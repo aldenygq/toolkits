@@ -49,7 +49,7 @@ func (c *Casbin) AddRoleRule(params ...interface{}) error {
              return err
          }
      }
-     err := c.Cas.SavePolicy()
+     err = c.Cas.SavePolicy()
      if err != nil {
         return err
      }
@@ -88,7 +88,7 @@ func (c *Casbin) AddPolicyRule(params ...interface{}) error {
             return err
         }
     }
-    err := c.Cas.SavePolicy()
+    err = c.Cas.SavePolicy()
     if err != nil {
        return err
     }
