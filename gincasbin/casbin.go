@@ -30,12 +30,20 @@ func NewCasbin(tableName,rbacFile string,cas interface{},db *gorm.DB) (*Casbin,e
     },nil
 }
 //校验角色继承规则是否存在
-func (c *Casbin) CheckRoleRuleExist(params ...interface{}) bool {
-    return c.Cas.HasGroupingPolicy(params...)
+func (c *Casbin) CheckRoleRuleExist(params ...interface{}) (bool,error) {
+    result,err := c.Cas.HasGroupingPolicy(params...)
+    if err != nil {
+    	return result,err 
+    }
+    return result,nil 
 }
 //添加角色继承规则,先校验，再添加
 func (c *Casbin) AddRoleRule(params ...interface{}) error {
-     if !c.CheckRoleRuleExist(params...) {
+     result ,err := c.CheckRoleRuleExist(params...)
+     if err != nil {
+	 return err
+     }
+     if !result {
          _, err := c.Cas.AddGroupingPolicy(params...)
          if err != nil {
              return err
@@ -61,12 +69,20 @@ func (c *Casbin) AddRoleRules(rules [][]string) error {
     return nil
 }
 //校验策略规则是否存在
-func (c *Casbin) CheckPolicyExist(params ...interface{}) bool {
-    return c.Cas.HasPolicy(params...)
+func (c *Casbin) CheckPolicyExist(params ...interface{}) (bool,error) {
+   result,err := c.Cas.HasPolicy(params...)
+   if err != nil {
+   	return result,err 
+   }
+    return result,nil 
 }
 //添加规则，先校验，再添加
 func (c *Casbin) AddPolicyRule(params ...interface{}) error {
-    if !c.CheckPolicyExist(params...) {
+    result,err := c.CheckPolicyExist(params...)
+    if err != nil {
+	    return err 
+    }
+    if !result {
         _, err := c.Cas.AddPolicy(params...)
         if err != nil {
             return err
