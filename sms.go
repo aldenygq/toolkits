@@ -121,7 +121,7 @@ func (t *TencentSmsClient) SendSms(signName,templateId,phoneNumbers,content stri
 // SmsServiceConfig 短信服务配置
 type SmsServiceConfig struct {
 	//Type SmsServiceType
-	Type string
+	Cloud string
 	// AK/SK配置
 	AccessKeyId     string
 	AccessKeySecret string
@@ -143,7 +143,7 @@ func InitGlobalSmsClient(config SmsServiceConfig) error {
 	defer GlobalMutex.Unlock()
 
 	var err error
-	switch config.Type {
+	switch config.Cloud {
 	case "aliyun":
 		GlobalSmsClient, err = NewAliyunSmsClient(config.AccessKeyId, config.AccessKeySecret,config.Endpoint)
 	case "tencent":
