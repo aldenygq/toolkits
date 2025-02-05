@@ -8,7 +8,7 @@ import (
 
 func Test_SendSms(t *testing.T){
     var cnf SmsServiceConfig
-    cnf.Type = "aliyun"
+    cnf.Cloud = "aliyun"
     cnf.AccessKeyId = "xxxxxx"
     cnf.AccessKeySecret = "xxxxxxxx"
     cnf.Endpoint = "xxxxxxxx"
