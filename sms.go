@@ -149,7 +149,7 @@ func InitGlobalSmsClient(config SmsServiceConfig) error {
 	case "tencent":
 		GlobalSmsClient, err = NewTencentSmsClient(config.AccessKeyId, config.AccessKeySecret,config.Endpoint, config.Region,config.SdkAppId)
 	default:
-		return fmt.Errorf("unsupported SMS service type: %s", config.Type)
+		return fmt.Errorf("unsupported SMS service type: %s", config.Cloud)
 	}
 	if err != nil {
 		return fmt.Errorf("failed to initialize global SMS client: %w", err)
