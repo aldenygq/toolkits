@@ -36,7 +36,6 @@ type MailConf struct {
 	host     string
 	port     string
 }
-
 func NewMailClient(mail MailConf) (*smtp.Client,error) {
     auth := smtp.PlainAuth("", mail.user, mail.passwd, mail.host)
     conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%s", mail.host, mail.port), &tls.Config{})
@@ -63,6 +62,10 @@ func NewMailClient(mail MailConf) (*smtp.Client,error) {
     return c,nil
 }
 
+func VerifyMailAddree(mail string) bool {
+    regex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+    return regex.MatchString(email)
+}
 func SendMail(c *smtp.Client,content Message) error {
 	buffer := bytes.NewBuffer(nil)
 	boundary := "GoBoundary"
