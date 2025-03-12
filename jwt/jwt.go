@@ -4,6 +4,7 @@ import (
 	"errors"
   "github.com/golang-jwt/jwt"
   "time"
+	"github.com/gofrs/uuid/v5"
 )
 
 // JWT 签名结构
@@ -23,6 +24,9 @@ var (
 type CustomClaims struct {
 	ID       int64  `json:"id"`
 	UserName string `json:"username"`
+	ClientIP   string  `json:"clientip"`
+	Browser    string   `json:"browser"`
+	UUID        uuid.UUID
 	jwt.StandardClaims
 }
 
