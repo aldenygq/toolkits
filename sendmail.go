@@ -8,6 +8,7 @@ import (
         "bytes"
         "time"
         "io/ioutil"
+	"regexp"
         "encoding/base64"
 )
 type Mail interface {
@@ -64,7 +65,7 @@ func NewMailClient(mail MailConf) (*smtp.Client,error) {
 
 func VerifyMailAddree(mail string) bool {
     regex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
-    return regex.MatchString(email)
+    return regex.MatchString(mail)
 }
 func SendMail(c *smtp.Client,content Message) error {
 	buffer := bytes.NewBuffer(nil)
