@@ -9,17 +9,24 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 )
+//int64类型转*int64
 func Int64ToPointInt64(i int64) *int64 {
 	ptrValue := new(int64)
     	*ptrValue = i
 	return  ptrValue
 }
-//string to int
-func StrToInt(index string) int {
-	result,_:= strconv.Atoi(index)
+
+
+//string字符串转int
+func StrToInt(index string) (int,error) {
+	result,err := strconv.Atoi(index)
+	if err != nil {
+		return 0,err
+	}
 	return result
 }
-//str转int64
+
+//string字符串转int64
 func StrToInt64(str string) (int64, error) {
 	var (
 		num int64
@@ -32,22 +39,28 @@ func StrToInt64(str string) (int64, error) {
 
 	return num, nil
 }
+
 //float64 To string
 func Float64ToString(e float64) string {
 	return strconv.FormatFloat(e, 'E', -1, 64)
 }
+
 //int To string
 func IntToString(e int) string {
 	return strconv.Itoa(e)
 }
+
 //int64 To string
 func Int64ToString(e int64) string {
 	return strconv.FormatInt(e, 10)
 }
 
 //map to json
-func MapToJson(input map[string]interface{}) string {
-	data,_ := json.Marshal(input)
+func MapToJson(input map[string]interface{}) (string,error) {
+	data,err := json.Marshal(input)
+	if err != nil {
+		return "",err	
+	}
 	return string(data)
 }
 
@@ -55,10 +68,12 @@ func MapToJson(input map[string]interface{}) string {
 func RuneToStr(r []rune) string {
 	return string(r)
 }
+
 //string to []rune
 func StrToRune(s string) []rune {
 	return []rune(s)
 }
+
 //bool to string
 func BoolToStr(b bool) string {
 	//todo :bool to string
@@ -74,6 +89,7 @@ func StrToBool(str string) bool {
 	b, _ := strconv.ParseBool("1")
 	return b
 }
+
 //复杂结构转为string，可转类型包含map、struct
 func StructToString(data interface{}) (string, error) {
 	d, err := json.Marshal(data)
@@ -83,6 +99,7 @@ func StructToString(data interface{}) (string, error) {
 
 	return string(d), nil
 }
+
 //取百分比,n表示取几位小数
 func FloatRound(f float64, n int) float64 {
 	format := "%." + strconv.Itoa(n) + "f"
@@ -109,13 +126,31 @@ func CheckString(str string) bool {
 	}
 	return false
 }
+
 //校验hash密码
-func CompareHashAndPassword(e string, p string) (bool, error) {
-	err := bcrypt.CompareHashAndPassword([]byte(e), []byte(p))
-	if err != nil {
-		return false, err
+func CompareHashAndPassword(hashedPassword string, plainPassword string) error {
+    err := bcrypt.CompareHashAndPassword(
+        []byte(hashedPassword),
+        []byte(plainPassword),
+    )
+    
+    if err != nil {
+        // 对系统级错误进行封装，保留原始错误信息
+        if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+            return fmt.Errorf("密码验证失败: %w", err)
+        }
+        return fmt.Errorf("密码系统错误: %w", err)
+    }
+    return nil
+}
+//slice根据指定分隔符生成指定格式字符串，如输入["123456","56789"]和符号@，输出"@123456@56789"
+func StringBuild(numbers []string, symbol string) string {
+	var builder strings.Builder
+	for _, num := range numbers {
+		builder.WriteString(symbol)
+		builder.WriteString(num)
 	}
-	return true, nil
+	return builder.String()
 }
 
 //阿拉伯数值转中文数值
