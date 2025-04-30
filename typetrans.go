@@ -129,7 +129,10 @@ func CheckString(str string) bool {
 
 //校验hash密码
 func CompareHashAndPassword(hashedPassword string, plainPassword string) error {
-    err := bcrypt.CompareHashAndPassword(
+   if hashedPassword == "" || plainPassword == "" {
+       return errors.New("空密码参数")
+   }    
+   err := bcrypt.CompareHashAndPassword(
         []byte(hashedPassword),
         []byte(plainPassword),
     )
