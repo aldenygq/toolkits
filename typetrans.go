@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-	//"strings"
+	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -127,7 +127,12 @@ func CheckString(str string) bool {
 	return false
 }
 
-//校验hash密码
+// CompareHashAndPassword 安全地验证BCrypt哈希密码与明文是否匹配
+// 参数：
+//   hashedPassword: BCrypt哈希后的密码字符串
+//   plainPassword: 用户输入的明文密码
+// 返回值：
+//   error: 验证成功返回nil，失败返回具体错误原因
 func CompareHashAndPassword(hashedPassword string, plainPassword string) error {
    if hashedPassword == "" || plainPassword == "" {
        return errors.New("空密码参数")
@@ -146,6 +151,7 @@ func CompareHashAndPassword(hashedPassword string, plainPassword string) error {
     }
     return nil
 }
+
 //slice根据指定分隔符生成指定格式字符串，如输入["123456","56789"]和符号@，输出"@123456@56789"
 func StringBuild(numbers []string, symbol string) string {
 	var builder strings.Builder
@@ -154,6 +160,45 @@ func StringBuild(numbers []string, symbol string) string {
 		builder.WriteString(num)
 	}
 	return builder.String()
+}
+
+//隐藏手机号部分字符串，通常是将中间几位替换为星号（*），以保护用户隐私。
+//参数：
+//phone：手机号
+//startIndex：星号开始字符串索引位置
+//endIndex：星号结束字符串索引位置
+func HidePhoneWithFormat(phone string,startIndex,endIndex int) string {
+    //提取数字
+    re := regexp.MustCompile(`\d+`)
+    digits := re.FindString(phone)
+    //校验手机号是否合法
+    if phone == "" || len(digits) < 11 {
+        return phone
+    }
+    if startIndex < 0 || endIndex > 10 {
+        return phone
+    }
+
+
+    // 隐藏中间部分
+    hidden := digits[:startIndex] + "****" + digits[endIndex:]
+
+    // 恢复原格式（将隐藏后的数字放回原位置）
+    result := ""
+    digitIndex := 0
+    for _, char := range phone {
+        if re.MatchString(string(char)) {
+            if digitIndex < len(hidden) {
+                result += string(hidden[digitIndex])
+                digitIndex++
+            } else {
+                result += string(char)
+            }
+        } else {
+            result += string(char)
+        }
+    }
+    return result
 }
 
 //阿拉伯数值转中文数值
