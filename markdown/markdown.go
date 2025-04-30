@@ -19,7 +19,7 @@ var defaultConfig = MarkdownConfig{
 }
 
 // 转换HTML模板为Markdown
-func ConvertToMarkdown(template string, data map[string]string, config ...MarkdownConfig) string {
+func ConvertToMarkdown(template string,keepMissing bool, data map[string]string, config ...MarkdownConfig) string {
 	// 合并配置
 	cfg := defaultConfig
 	if len(config) > 0 {
@@ -27,18 +27,26 @@ func ConvertToMarkdown(template string, data map[string]string, config ...Markdo
 	}
 
 	// 处理占位符
-	re := regexp.MustCompile(`{(\w+)}`)
-	content := re.ReplaceAllStringFunc(template, func(m string) string {
+    re := regexp.MustCompile(`{([^{}]+)}`)
+
+	template = re.ReplaceAllStringFunc(template, func(m string) string {
 		key := m[1 : len(m)-1]
-		return data[key]
+        if val, exists := data[key]; exists {
+            return val
+        }
+        if keepMissing {
+            return m
+        }
+        return ""
 	})
 
+    fmt.Printf("template:%v\n",template)
 	// 转换HTML标签
-	content = strings.ReplaceAll(content, "<br/>", "\n")
+	template = strings.ReplaceAll(template, "<br/>", "\n")
 
 	// 构建Markdown
 	var builder strings.Builder
-	lines := strings.Split(content, "\n")
+	lines := strings.Split(template, "\n")
 
 	// 处理标题
 	if len(lines) > 0 {
@@ -69,21 +77,20 @@ func ConvertToMarkdown(template string, data map[string]string, config ...Markdo
 
 	return strings.TrimSpace(builder.String())
 }
-
 /*
 func main() {
 	// 原始模板
-	template := "{值班规则名称}值班提醒<br/>时段: {值班时间段}<br/>今日值班人员: {值班人员}"
+	template := "{值班规则名称}<br/>时段: {值班时间段}<br/>今日值班人员: {值班人员}"
 
 	// 填充数据
 	data := map[string]string{
-		"值班规则名称": "24小时应急响应",
+		"值班规则名称": "24小时应急响应值班提醒",
 		"值班时间段":  "2023-07-20 18:00 至 2023-07-21 08:00",
 		"值班人员":    "王五（主值班员） | 赵六（备勤）",
 	}
 
 	// 生成Markdown
-	output := ConvertToMarkdown(template, data, MarkdownConfig{
+	output := ConvertToMarkdown(template, true,data,MarkdownConfig{
 		HeaderLevel: 1,
 		//ListSymbol:  "•",
 		ListSymbol:  "-",
